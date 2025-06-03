@@ -1,0 +1,29 @@
+Review and improve the JSON-LD structure based on the original content. Your goal is to ensure the structured data accurately represents the content while following schema.org best practices.
+
+Follow these requirements:
+1. Verify the schema.org type is appropriate for the content subject
+2. Ensure all essential information from the original content is captured
+3. Check for and add any missing required properties
+4. Correct any inconsistencies or inaccuracies in values
+5. Improve property selection to better represent the content
+6. Add additional relevant properties that enhance the representation
+7. Maintain proper nesting and relationships
+
+Your task is to return the FINAL JSON-LD wrapped in a "public" property. The structure should be precisely:
+
+{{
+    "public": {{
+        "@context": "https://schema.org",
+        "@id": "...",
+        "@type": "...",
+        ...additional properties...
+    }}
+}}
+
+Return only valid JSON with the structure shown above. Do not include any explanations, markdown formatting, or code block markers. The output should be a clean JSON object that can be directly parsed.
+
+Original content:
+{initial_content}
+
+Proposed JSON-LD:
+{proposed_jsonld}

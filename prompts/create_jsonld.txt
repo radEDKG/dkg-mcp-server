@@ -1,0 +1,102 @@
+Create a schema.org compliant JSON-LD representation based on the provided text content.
+
+Follow these rules strictly:
+
+1. Select the most semantically accurate schema.org @type (e.g., Article, Organization, Person, Product, SoftwareApplication). Prefer more specific subtypes when applicable (e.g., TechArticle, NGO, MobileApplication).
+2. Include essential properties such as name, description, identifier, etc.
+3. Create a unique @id. Use either:
+   - a urn: identifier formed as urn:<slug-from-name>, OR
+   - a canonical url if clearly provided or implied.
+4. Always set "@context": "https://schema.org".
+5. Extract ONLY factual information stated or clearly implied in the input.
+6. Include all relevant specialized properties for the chosen type (e.g., founder, author, foundingDate, applicationCategory, address).
+7. Format all dates using the ISO 8601 standard (YYYY-MM-DD).
+8. Nest related entities using proper types (e.g., author as a Person or Organization, location, etc.).
+9. Return only valid JSON-LD — no explanations, no markdown, no code blocks.
+
+Examples of high-quality output:
+
+1. Organization Example (OriginTrail):
+{{
+  "@context": "https://schema.org",
+  "@id": "https://origintrail.io",
+  "@type": "Organization",
+  "name": "OriginTrail",
+  "description": "OriginTrail is an ecosystem working toward a verifiable Internet for Artificial Intelligence—an Internet where information is trustworthy, easy to check, and keeps humans in the loop. It organizes all human knowledge in a Decentralized Knowledge Graph (DKG) to enable collective neuro-symbolic AI, combining structured symbolic data with neural AI technologies to support human-centric, decentralized AI solutions.",
+  "url": "https://origintrail.io",
+  "alternateName": "OriginTrail Ecosystem",
+  "sameAs": [
+    "https://twitter.com/origin_trail",
+    "https://www.linkedin.com/company/origintrail/"
+  ],
+  "areaServed": "Worldwide",
+  "memberOf": {{
+    "@type": "Organization",
+    "name": "W3C"
+  }}
+}}
+
+2. Person Example:
+{{
+  "@context": "https://schema.org",
+  "@id": "urn:lena-orbit",
+  "@type": "Person",
+  "name": "Lena Orbit",
+  "jobTitle": "AI Researcher",
+  "knowsAbout": [
+    "Decentralized Knowledge Graphs",
+    "Neuro-symbolic AI",
+    "Trusted AI Systems"
+  ],
+  "url": "https://example.org/lena-orbit"
+}}
+
+3. CreativeWork Example:
+{{
+  "@context": "https://schema.org",
+  "@id": "https://origintrail.io/documents/Verifiable_Internet_for_Artificial_Intelligence_whitepaper_v3_pre_publication.pdf",
+  "@type": "CreativeWork",
+  "name": "Verifiable Internet for Artificial Intelligence: The Convergence of Crypto, Internet and AI",
+  "description": "This whitepaper presents a vision for a Verifiable Internet for AI, utilizing blockchain and AI synergies to ensure data provenance, integrity, and verifiability. It introduces the OriginTrail Decentralized Knowledge Graph (DKG) to combat misinformation, biases, and data ownership issues, blending neural and symbolic AI with Web3 technologies for a more transparent and ethical AI landscape.",
+  "author": {{
+    "@type": "Organization",
+    "name": "Trace Labs",
+    "url": "https://tracelabs.io"
+  }},
+  "datePublished": "2023-11-15",
+  "url": "https://origintrail.io/documents/Verifiable_Internet_for_Artificial_Intelligence_whitepaper_v3_pre_publication.pdf",
+  "license": "https://example.com/licenses/by/4.0/"
+}}
+
+4. Event Example:
+{{
+  "@context": "https://schema.org",
+  "@id": "urn:acme-ai-summit-2024",
+  "@type": "Event",
+  "name": "Acme AI Summit 2024",
+  "description": "An international summit hosted by Acme to explore the intersection of decentralized infrastructure, AI trustworthiness, and neuro-symbolic intelligence.",
+  "startDate": "2024-09-12",
+  "endDate": "2024-09-13",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
+  "location": {{
+    "@type": "Place",
+    "name": "Zurich",
+    "address": {{
+      "@type": "PostalAddress",
+      "streetAddress": "Rämistrasse 101",
+      "addressLocality": "Zurich",
+      "addressCountry": "CH",
+      "postalCode": "8092"
+    }}
+  }},
+  "organizer": {{
+    "@type": "Organization",
+    "name": "Acme",
+    "url": "https://example.com/acme"
+  }}
+}}
+
+User provided content for transformation into JSON-LD:
+{initial_content}
+

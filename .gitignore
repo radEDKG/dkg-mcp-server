@@ -1,0 +1,6 @@
+.env
+debug.log
+venv/
+.vscode/
+__pycache__/
+testing

@@ -1,0 +1,8 @@
+# Main packages
+dkg
+mcp==1.6.0
+python-dotenv
+langchain>=0.0.0  # Latest version
+langchain-openai>=0.0.0  # Latest version
+langchain-google-genai>=0.0.0  # Latest version
+google-generativeai>=0.0.0  # Latest version

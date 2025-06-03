@@ -1,0 +1,62 @@
+# This YAML file defines the OpenAPI specification for the OriginTrail DKG MCP server.
+# Use it to deploy the server in SSE transport mode and import the API into frameworks
+# like Microsoft Copilot to enable agent integration with the DKG MCP server.
+swagger: '2.0'
+info:
+  title: OriginTrail DKG
+  description: MCP server for interacting with OriginTrail Decentralized Knowledge Graph
+  version: 1.0.0
+host: "" # Enter the IP and port of the server where your DKG MCP server is deployed (e.g., "192.168.1.100:8000")
+basePath: /
+schemes:
+  - http
+definitions:
+  QueryResponse:
+    type: object
+    properties:
+      jsonrpc:
+        type: string
+      id:
+        type: string
+      method:
+        type: string
+      params:
+        type: object
+      result:
+        type: object
+      error:
+        type: object
+paths:
+  /sse:
+    get:
+      summary: OriginTrail DKG MCP Server
+      description: "Provides tools for querying and creating assets on the OriginTrail Decentralized Knowledge Graph"
+      parameters:
+        - in: query
+          name: sessionId
+          type: string
+          required: false
+      produces:
+        - application/json
+        - text/event-stream
+      responses:
+        '200':
+          description: SSE Connection Established
+          schema:
+            $ref: '#/definitions/QueryResponse'
+        '201':
+          description: Created and will follow callback
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/QueryResponse'
+        '401':
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/QueryResponse'
+      operationId: InvokeMCP
+      tags:
+        - Agentic
+        - McpSse
+securityDefinitions: {}
+security: []

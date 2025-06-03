@@ -1,7 +1,9 @@
-# OriginTrail DKG MCP Server
+# OriginTrail DKG MCP Server (example)
 
 ## Overview
 The OriginTrail DKG MCP Server connects MCP-compatible agents with the OriginTrail Decentralized Knowledge Graph (DKG), making it easy to create, retrieve, link, and exchange verifiable knowledge.
+
+Note: This is BETA software and not recommended for use in production
 
 ## Key Features
 

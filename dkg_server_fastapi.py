@@ -1,5 +1,11 @@
 # dkg-mcp-server/dkg_server.py
 
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
+
+from fastapi.middleware.cors import CORSMiddleware
+
+
 from mcp.server.fastmcp import FastMCP, Context
 from dkg import DKG
 from dkg.providers import BlockchainProvider, NodeHTTPProvider
@@ -22,6 +28,35 @@ from starlette.responses import PlainTextResponse
 import logging
 from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler
 import argparse
+
+
+
+mcp_dkg_router = FastAPI()
+
+# Define request models
+class AssetRequest(BaseModel):
+    content: str
+
+class QueryRequest(BaseModel):
+    name: str
+
+@mcp_dkg_router.get("/health")
+async def health():
+    return {"status": "ok"}
+
+# async def query_dkg_by_name(name: str, ctx: Context = None) -> str:
+@mcp_dkg_router.post("/KA_query")
+async def ka_query(request: QueryRequest):
+    result = await query_dkg_by_name(request.name, ctx=Context())
+    return {"result": result}
+
+# async def create_knowledge_asset(content: str, ctx: Context = None) -> str:
+@mcp_dkg_router.post("/KA_publish")
+async def ka_publish(request: AssetRequest):
+    result = await create_knowledge_asset(request.content, ctx=Context())
+    return {"result": result}
+
+
 
 # Configure logging to write to both file and stderr
 log_file_path = os.path.join(os.path.dirname(__file__), 'debug.log')
@@ -426,18 +461,37 @@ if __name__ == "__main__":
         logger.info("Logging system initialized")
         
         # Create an ASGI application for the SSE server, integrating the DKG MCP server and debug endpoints
-        app = Starlette(
+        sse_app = Starlette(
             routes=[
                 Route('/debug', debug_endpoint),
                 Mount('/', app=mcp.sse_app()),
             ]
         )
-        app.add_middleware(FixSSEEndpointMiddleware) # Add the middleware to fix content type and SSE endpoint URLs as defined above
+        #app.add_middleware(FixSSEEndpointMiddleware) # Add the middleware to fix content type and SSE endpoint URLs as defined above
 
         # Use environment variables for specific configuration of the SSE server or use defaults
         host = os.getenv("HOST", "0.0.0.0")
         port = int(os.getenv("PORT", 8000))
         
         logger.info(f"Server will run on {host}:{port}")
+
+        # Run the FastAPI app ================================
         
-        uvicorn.run(app, host=host, port=port)
+        sse_app.add_middleware(FixSSEEndpointMiddleware)
+        sse_app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
+        main_api = FastAPI()
+
+        main_api.mount("/", sse_app)
+        main_api.mount("/api", mcp_dkg_router)
+        
+        # end ====================================================
+
+        #uvicorn.run(app, host=host, port=port)
+        uvicorn.run(main_api, host=host, port=port)

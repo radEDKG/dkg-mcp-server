@@ -214,7 +214,8 @@ async def query_dkg_by_name(name: str, ctx: Context = None) -> str:
         WHERE {{
             ?s schema:name ?name ;
                schema:description ?description .
-            FILTER(REGEX(?name, "{name}", "i"))
+            FILTER(REGEX(?name, "{name}", "i")
+            || REGEX(?description, "{name}", "i"))
         }}
         LIMIT 5
         """

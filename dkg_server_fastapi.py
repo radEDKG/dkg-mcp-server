@@ -249,7 +249,8 @@ async def query_dkg_by_name(name: str, ctx: Context = None) -> str:
         WHERE {{
             ?s schema:name ?name ;
                schema:description ?description .
-            FILTER(REGEX(?name, "{name}", "i"))
+            FILTER(REGEX(?name, "{name}", "i")
+            || REGEX(?description, "{name}", "i"))
         }}
         LIMIT 5
         """
@@ -487,9 +488,10 @@ if __name__ == "__main__":
         )
 
         main_api = FastAPI()
-
-        main_api.mount("/", sse_app)
+        
         main_api.mount("/api", mcp_dkg_router)
+        main_api.mount("/", sse_app)
+        
         
         # end ====================================================
 

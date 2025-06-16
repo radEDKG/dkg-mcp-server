@@ -27,9 +27,7 @@ async def main():
             create_result = await session.call_tool(
                 "create_knowledge_asset",
                 {"content": """
-                    This knowledge asset is about quantum gravity. 
-                    The asset’s name is "QuantumGravityTest1" and its description is 
-                    "A simple test asset for quantum gravity on my local Blazegraph node."
+                    lee simpson is a good man and loves to code and play with his dog!!!
                 """}
             )
             print("\n--- create_knowledge_asset returned: ---\n")
